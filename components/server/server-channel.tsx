@@ -5,7 +5,7 @@ import { Channel, ChannelType, MemberRole, Server } from "@prisma/client"
 import { Edit, Hash, Lock, Mic, Trash, Video } from "lucide-react"
 import { useParams, useRouter } from "next/navigation"
 import { ActionTooltip } from "../action-tooltip"
-import { useModal } from "@/hooks/use-modal-store"
+import { ModalType, useModal } from "@/hooks/use-modal-store"
 
 interface ServerChannelProps {
   channel: Channel
@@ -26,9 +26,18 @@ export const ServerChannel = ({ channel, server, role }: ServerChannelProps) => 
 
   const Icon = iconMap[channel.type]
 
+  const onClick = () => {
+    router.push(`/servers/${params?.serverId}/channels/${channel.id}`)
+  }
+
+  const onAction = (e: React.MouseEvent, actionType: ModalType) => {
+    e.stopPropagation()
+    onOpen(actionType, { channel, server })
+  }
+
   return (
     <button
-      onClick={() => { }}
+      onClick={onClick}
       className={cn(
         "group px-2 py-2 rounded-md flex items-center gap-x-2 w-full hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 transition mb-1",
         params?.channelId === channel.id && "bg-zinc-700 dark:bg-zinc-700",
@@ -46,14 +55,14 @@ export const ServerChannel = ({ channel, server, role }: ServerChannelProps) => 
         <div className="ml-auto flex items-center gap-x-2">
           <ActionTooltip label="Edit" side="top">
             <Edit
-              onClick={() => onOpen("editChannel", { channel, server })}
+              onClick={(e) => onAction(e, "editChannel")}
               className="hidden group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-400 dark:hover:text-zinc-300 transition"
             />
           </ActionTooltip>
 
           <ActionTooltip label="Delete" side="top">
             <Trash
-              onClick={() => onOpen("deleteChannel", { channel, server })}
+              onClick={(e) => onAction(e, "deleteChannel")}
               className="hidden group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-400 dark:hover:text-zinc-300 transition"
             />
           </ActionTooltip>
