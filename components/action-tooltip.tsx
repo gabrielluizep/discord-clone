@@ -1,5 +1,3 @@
-"use client"
-
 import {
   Tooltip,
   TooltipContent,
@@ -23,7 +21,7 @@ export const ActionTooltip = ({
   return (
     <TooltipProvider>
       <Tooltip delayDuration={50}>
-        <TooltipTrigger>
+        <TooltipTrigger asChild>
           {children}
         </TooltipTrigger>
 
