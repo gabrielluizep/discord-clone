@@ -1,7 +1,9 @@
-import { currentProfile } from "@/lib/current-profile";
-import { db } from "@/lib/db";
-import { MemberRole } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+
+import { MemberRole } from '@prisma/client';
+
+import { currentProfile } from '@/lib/current-profile';
+import { db } from '@/lib/db';
 
 export async function POST(req: Request) {
   try {
@@ -9,17 +11,17 @@ export async function POST(req: Request) {
     const { name, type } = await req.json();
     const { searchParams } = new URL(req.url);
 
-    const serverId = searchParams.get("serverId");
+    const serverId = searchParams.get('serverId');
 
     if (!profile) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return new NextResponse('Unauthorized', { status: 401 });
     }
 
     if (!serverId) {
-      return new NextResponse("Server ID missing", { status: 400 });
+      return new NextResponse('Server ID missing', { status: 400 });
     }
 
-    if (name === "general") {
+    if (name === 'general') {
       return new NextResponse('Name canoot be "general"', { status: 400 });
     }
 
@@ -48,7 +50,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(server);
   } catch (error) {
-    console.log("[CHANNELS_POST]", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    console.log('[CHANNELS_POST]', error);
+    return new NextResponse('Internal Server Error', { status: 500 });
   }
 }

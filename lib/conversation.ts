@@ -1,8 +1,8 @@
-import { db } from "@/lib/db";
+import { db } from '@/lib/db';
 
 export const getOrCreateConversation = async (
   memberOneId: string,
-  memberTwoId: string
+  memberTwoId: string,
 ) => {
   let conversation =
     (await findConversation(memberOneId, memberTwoId)) ||

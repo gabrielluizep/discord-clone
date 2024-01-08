@@ -1,9 +1,11 @@
-"use client"
+'use client';
 
-import { useRouter } from "next/navigation";
+import { useState } from 'react';
 
-import axios from "axios";
-import qs from "query-string";
+import { useRouter } from 'next/navigation';
+
+import axios from 'axios';
+import qs from 'query-string';
 
 import {
   Dialog,
@@ -11,46 +13,44 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle
-} from "@/components/ui/dialog";
+  DialogTitle,
+} from '@/components/ui/dialog';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 
 import { useModal } from '@/hooks/use-modal-store';
-import { useState } from "react";
 
 export const DeleteChannelModal = () => {
-  const { isOpen, onClose, type, data } = useModal()
-  const router = useRouter()
+  const { isOpen, onClose, type, data } = useModal();
+  const router = useRouter();
 
+  const isModalOpen = isOpen && type === 'deleteChannel';
+  const { server, channel } = data;
 
-  const isModalOpen = isOpen && type === "deleteChannel"
-  const { server, channel } = data
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(false)
-
-  const onClick = async (values?: any) => {
+  const onClick = async () => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
 
       const url = qs.stringifyUrl({
         url: `/api/channels/${channel?.id}`,
         query: {
           serverId: server?.id,
-        }
-      })
+        },
+      });
 
-      await axios.delete(url)
+      await axios.delete(url);
 
-      router.push(`/servers/${server?.id}`)
-      onClose()
+      router.push(`/servers/${server?.id}`);
+      onClose();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
-      setIsLoading(false)
-      router.refresh()
+      setIsLoading(false);
+      router.refresh();
     }
-  }
+  };
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
@@ -61,25 +61,20 @@ export const DeleteChannelModal = () => {
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
             Are you sure you want to do this? <br />
-            <span className="font-semibold text-indigo-500">#{channel?.name}</span> will be permanently deleted.
+            <span className="font-semibold text-indigo-500">
+              #{channel?.name}
+            </span>{' '}
+            will be permanently deleted.
           </DialogDescription>
         </DialogHeader>
 
         <DialogFooter className="bg-gray-100 px-6 py-4">
           <div className="flex items-center justify-between w-full">
-            <Button
-              disabled={isLoading}
-              variant="ghost"
-              onClick={onClose}
-            >
+            <Button disabled={isLoading} variant="ghost" onClick={onClose}>
               Cancel
             </Button>
 
-            <Button
-              disabled={isLoading}
-              variant="primary"
-              onClick={onClick}
-            >
+            <Button disabled={isLoading} variant="primary" onClick={onClick}>
               Confirm
             </Button>
           </div>
@@ -87,4 +82,4 @@ export const DeleteChannelModal = () => {
       </DialogContent>
     </Dialog>
   );
-}
+};
