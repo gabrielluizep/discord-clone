@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "formulahendry.auto-rename-tag",
+    "biomejs.biome",
+    "unifiedjs.vscode-mdx",
+    "Prisma.prisma"
+  ]
+}
